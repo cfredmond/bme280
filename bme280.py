@@ -23,6 +23,8 @@ import time
 from ctypes import c_short
 from ctypes import c_byte
 from ctypes import c_ubyte
+from flask import Flask
+from flask import jsonify
 
 DEVICE = 0x76 # Default device I2C address
 
@@ -124,7 +126,8 @@ def readBME280All(addr=DEVICE):
   hum_raw = (data[6] << 8) | data[7]
 
   #Refine temperature
-  var1 = ((((temp_raw>>3)-(dig_T1<<1)))*(dig_T2)) >> 11  var2 = (((((temp_raw>>4) - (dig_T1)) * ((temp_raw>>4) - (dig_T1))) >> 12) * (dig_T3)) >> 14
+  var1 = ((((temp_raw>>3)-(dig_T1<<1)))*(dig_T2)) >> 11
+  var2 = (((((temp_raw>>4) - (dig_T1)) * ((temp_raw>>4) - (dig_T1))) >> 12) * (dig_T3)) >> 14
   t_fine = var1+var2
   temperature = float(((t_fine * 5) + 128) >> 8);
 
@@ -155,17 +158,29 @@ def readBME280All(addr=DEVICE):
 
   return temperature/100.0,pressure/100.0,humidity
 
-def main():
+# def main():
 
-  (chip_id, chip_version) = readBME280ID()
-  print "Chip ID     :", chip_id
-  print "Version     :", chip_version
+#   (chip_id, chip_version) = readBME280ID()
+#   print "Chip ID     :", chip_id
+#   print "Version     :", chip_version
 
-  temperature,pressure,humidity = readBME280All()
+#   temperature,pressure,humidity = readBME280All()
 
-  print "Temperature : ", temperature, "C"
-  print "Pressure : ", pressure, "hPa"
-  print "Humidity : ", humidity, "%"
+#   print "Temperature : ", temperature, "C"
+#   print "Pressure : ", pressure, "hPa"
+#   print "Humidity : ", humidity, "%"
 
-if __name__=="__main__":
-   main()
+# if __name__=="__main__":
+#    main()
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    # return 'Hello world'
+    temperature,pressure,humidity = readBME280All()
+    d = {'temperature': temperature * 1.8 + 32, 'pressure': pressure, 'humidity': humidity}
+    return jsonify(d)
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')
