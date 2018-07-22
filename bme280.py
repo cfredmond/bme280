@@ -174,7 +174,6 @@ def readBME280All(addr=DEVICE):
 #    main()
 
 app = Flask(__name__)
-app.run(debug=True, host='0.0.0.0')
 
 @app.route('/debug')
 def index():
@@ -185,3 +184,6 @@ def index():
 
 # if __name__ == '__main__':
 #     app.run(debug=True, host='0.0.0.0')
+
+app.run(debug=True, host='0.0.0.0')
+
