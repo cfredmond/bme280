@@ -174,6 +174,7 @@ def readBME280All(addr=DEVICE):
 #    main()
 
 app = Flask(__name__)
+app.run(debug=True, host='0.0.0.0')
 
 @app.route('/')
 def index():
@@ -182,5 +183,5 @@ def index():
     d = {'temperature': temperature * 1.8 + 32, 'pressure': pressure, 'humidity': humidity}
     return jsonify(d)
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+# if __name__ == '__main__':
+#     app.run(debug=True, host='0.0.0.0')
