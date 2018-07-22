@@ -176,7 +176,7 @@ def readBME280All(addr=DEVICE):
 app = Flask(__name__)
 app.run(debug=True, host='0.0.0.0')
 
-@app.route('/')
+@app.route('/debug')
 def index():
     # return 'Hello world'
     temperature,pressure,humidity = readBME280All()
