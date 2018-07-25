@@ -71,7 +71,11 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var AppComponent = /** @class */ (function () {
     function AppComponent(http) {
         this.http = http;
-        this.bme280 = null;
+        this.bme280 = {
+            humidity: 0,
+            pressure: 0,
+            temperature: 0,
+        };
     }
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -80,7 +84,7 @@ var AppComponent = /** @class */ (function () {
                 subscribe(function (bme280) {
                 _this.bme280 = bme280;
             });
-        }, 30000);
+        }, 5000);
     };
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({

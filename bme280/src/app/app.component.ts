@@ -13,7 +13,11 @@ export class AppComponent implements OnInit {
 
   constructor(
   private http: HttpClient) {
-  	this.bme280 = null;
+  	this.bme280 = {
+      humidity: 0,
+      pressure: 0,
+      temperature: 0,
+    };
   }
 
   ngOnInit() {
@@ -22,6 +26,6 @@ export class AppComponent implements OnInit {
   			subscribe((bme280: Bme280) => {
   				this.bme280 = bme280;
   			});
-  	}, 30000);	
+  	}, 5000);	
   }
 }
