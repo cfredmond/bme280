@@ -76,8 +76,10 @@ var AppComponent = /** @class */ (function () {
         var _this = this;
         setInterval(function () {
             _this.http.get('/bme280').
-                subscribe(function (data) { return console.log(data); });
-        }, 15000);
+                subscribe(function (bme280) {
+                _this.bme280 = bme280;
+            });
+        }, 10000);
     };
     AppComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
