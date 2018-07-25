@@ -22,6 +22,6 @@ export class AppComponent implements OnInit {
   			subscribe((bme280: Bme280) => {
   				this.bme280 = bme280;
   			});
-  	}, 3000);	
+  	}, 30000);	
   }
 }
