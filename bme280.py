@@ -24,6 +24,7 @@ from ctypes import c_short
 from ctypes import c_byte
 from ctypes import c_ubyte
 from flask import Flask
+from flask import render_template
 from flask import jsonify
 
 DEVICE = 0x76 # Default device I2C address
@@ -163,7 +164,10 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    # return 'Hello world'
+    return render_template('index.html')
+
+@app.route('/bme280')
+def bme280():
     temperature,pressure,humidity = readBME280All()
     d = {'temperature': temperature * 1.8 + 32, 'pressure': pressure, 'humidity': humidity}
     return jsonify(d)
