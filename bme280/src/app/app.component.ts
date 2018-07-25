@@ -12,7 +12,9 @@ export class AppComponent implements OnInit {
 	bme280: Bme280;
 
   constructor(
-  private http: HttpClient) { }
+  private http: HttpClient) {
+  	this.bme280 = null;
+  }
 
   ngOnInit() {
   	setInterval(() => {
@@ -20,6 +22,6 @@ export class AppComponent implements OnInit {
   			subscribe((bme280: Bme280) => {
   				this.bme280 = bme280;
   			});
-  	}, 10000);	
+  	}, 3000);	
   }
 }
