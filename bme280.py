@@ -172,5 +172,17 @@ def bme280():
     d = {'temperature': temperature * 1.8 + 32, 'pressure': pressure, 'humidity': humidity}
     return jsonify(d)
 
+@app.route('/chart-data')
+def bme280():
+    mariadb_connection = mariadb.connect(user='root', password='rCxkwuz2hVApH4DO', database='bme280')
+    cursor = mariadb_connection.cursor()
+
+    cursor.execute("SELECT * FROM log")
+
+    for created_date, temperature, pressure, humidity in cursor:
+      results.append({'created_date': created_date, 'temperature': temperature, 'pressure': pressure, 'humidity': humidity})
+    
+    return jsonify({'results': results})
+
 app.run(debug=True, host='0.0.0.0')
 
