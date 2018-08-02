@@ -173,7 +173,7 @@ def bme280():
     return jsonify(d)
 
 @app.route('/chart-data')
-def bme280():
+def chartdata():
     mariadb_connection = mariadb.connect(user='root', password='rCxkwuz2hVApH4DO', database='bme280')
     cursor = mariadb_connection.cursor()
 
