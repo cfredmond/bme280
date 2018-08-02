@@ -171,7 +171,7 @@ def main():
 
   mariadb_connection = mariadb.connect(user='root', password='rCxkwuz2hVApH4DO', database='bme280')
   cursor = mariadb_connection.cursor()
-  cursor.execute("INSERT INTO log (temperature, pressure, humidity) VALUES (%s, %s, %s)", (temperature, pressure, humidity))
+  cursor.execute("INSERT INTO log (temperature, pressure, humidity) VALUES (%s, %s, %s)", (temperature * 1.8 + 32, pressure, humidity))
   mariadb_connection.commit()
   mariadb_connection.close()
 
