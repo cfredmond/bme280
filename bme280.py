@@ -26,6 +26,7 @@ from ctypes import c_ubyte
 from flask import Flask
 from flask import render_template
 from flask import jsonify
+import mysql.connector as mariadb
 
 DEVICE = 0x76 # Default device I2C address
 
