@@ -24,9 +24,7 @@ from ctypes import c_short
 from ctypes import c_byte
 from ctypes import c_ubyte
 from flask import Flask
-from flask import render_template
 from flask import jsonify
-import mysql.connector as mariadb
 
 DEVICE = 0x76 # Default device I2C address
 
@@ -165,25 +163,9 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
-
-@app.route('/bme280')
-def bme280():
     temperature,pressure,humidity = readBME280All()
     d = {'temperature': temperature * 1.8 + 32, 'pressure': pressure, 'humidity': humidity}
     return jsonify(d)
-
-@app.route('/chart-data')
-def chartdata():
-    mariadb_connection = mariadb.connect(user='root', password='rCxkwuz2hVApH4DO', database='bme280')
-    cursor = mariadb_connection.cursor()
-
-    cursor.execute("SELECT * FROM log")
-
-    for created_date, temperature, pressure, humidity in cursor:
-      results.append({'created_date': created_date, 'temperature': temperature, 'pressure': pressure, 'humidity': humidity})
-    
-    return jsonify({'results': results})
 
 app.run(debug=True, host='0.0.0.0')
 
