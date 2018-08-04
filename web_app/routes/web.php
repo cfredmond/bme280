@@ -3,6 +3,8 @@
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
 
+use Illuminate\Support\Facades\DB;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -26,4 +28,10 @@ Route::get('/sensor-data', function () {
 	$body = $res->getBody();
 
     return $body;
+});
+
+Route::get('/log', function () {
+	$log = DB::table('log')->get();
+
+    return $log;
 });
