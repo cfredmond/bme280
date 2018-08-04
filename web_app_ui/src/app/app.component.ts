@@ -22,7 +22,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
   	setInterval(() => {
-  		this.http.get('/bme280').
+  		this.http.get('/sensor-data').
   			subscribe((bme280: Bme280) => {
   				this.bme280 = bme280;
   			});

@@ -80,7 +80,7 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
         setInterval(function () {
-            _this.http.get('/bme280').
+            _this.http.get('/sensor-data').
                 subscribe(function (bme280) {
                 _this.bme280 = bme280;
             });
