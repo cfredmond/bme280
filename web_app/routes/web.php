@@ -20,9 +20,11 @@ Route::get('/', function () {
 
 Route::get('/sensor-data', function () {
 	$client = new GuzzleHttp\Client();
-	$res = $client->request('GET', 'https://api.github.com/user', [
-	    'auth' => ['cfredmond', 'Gaoy(12i']
-	]);
+	// $res = $client->request('GET', 'https://api.github.com/user', [
+	//    'auth' => ['cfredmond', 'Gaoy(12i']
+	// ]);
+
+	$res = $client->request('GET', 'http://0.0.0.0:5000/');
 
 	// echo $res->getStatusCode();
 	// "200"
