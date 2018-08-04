@@ -1,5 +1,8 @@
 <?php
 
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,4 +16,19 @@
 
 Route::get('/', function () {
     return view('web_app_ui');
+});
+
+Route::get('/sensor-data', function () {
+	$client = new GuzzleHttp\Client();
+	$res = $client->request('GET', 'https://api.github.com/user', [
+	    'auth' => ['cfredmond', 'Gaoy(12i']
+	]);
+
+	// echo $res->getStatusCode();
+	// "200"
+	// echo $res->getHeader('content-type');
+	// 'application/json; charset=utf8'
+	echo $res->getBody();
+
+    return 'sensor data';
 });
