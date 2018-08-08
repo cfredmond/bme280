@@ -321,7 +321,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <!-- Required meta tags -->\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n\n    <!-- Bootstrap CSS -->\n    <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css\" integrity=\"sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO\" crossorigin=\"anonymous\">\n\n    <title>Closet</title>\n  </head>\n  <body>\n    <h1>Closet</h1>\n    <ul>\n      <li>Temperature: {{ bme280.temperature | number: '1.1-1' }}</li>\n      <li>Humidity: {{ bme280.humidity | number: '1.1-1' }}</li>\n      <li>Pressure: {{ bme280.pressure | number: '1.1-1' }}</li>\n    </ul>\n\n    <canvas id=\"canvas\" width=\"800\" height=\"800\">{{ chart }}</canvas>\n\n    <!-- Optional JavaScript -->\n    <!-- jQuery first, then Popper.js, then Bootstrap JS -->\n    <script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script>\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js\" integrity=\"sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49\" crossorigin=\"anonymous\"></script>\n    <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js\" integrity=\"sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy\" crossorigin=\"anonymous\"></script>\n  </body>\n</html>"
+module.exports = "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <!-- Required meta tags -->\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n\n    <!-- Bootstrap CSS -->\n    <link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css\" integrity=\"sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO\" crossorigin=\"anonymous\">\n\n    <title>Closet</title>\n  </head>\n  <body>\n    <h1>Closet</h1>\n    <ul>\n      <li>Temperature: {{ bme280.temperature | number: '1.1-1' }}</li>\n      <li>Humidity: {{ bme280.humidity | number: '1.1-1' }}</li>\n      <li>Pressure: {{ bme280.pressure | number: '1.1-1' }}</li>\n    </ul>\n\n    <canvas id=\"canvas\" width=\"400\" height=\"400\">{{ chart }}</canvas>\n\n    <!-- Optional JavaScript -->\n    <!-- jQuery first, then Popper.js, then Bootstrap JS -->\n    <script src=\"https://code.jquery.com/jquery-3.3.1.slim.min.js\" integrity=\"sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\" crossorigin=\"anonymous\"></script>\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js\" integrity=\"sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49\" crossorigin=\"anonymous\"></script>\n    <script src=\"https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js\" integrity=\"sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy\" crossorigin=\"anonymous\"></script>\n  </body>\n</html>"
 
 /***/ }),
 
@@ -362,12 +362,62 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
+        this.http.get('/sensor-data').
+            subscribe(function (bme280) {
+            _this.bme280 = bme280;
+        });
         setInterval(function () {
             _this.http.get('/sensor-data').
                 subscribe(function (bme280) {
                 _this.bme280 = bme280;
             });
         }, 5000);
+        this.http.get('/log').
+            subscribe(function (resp) {
+            console.log(resp);
+            var created_dates = [];
+            var temperatures = [];
+            resp.forEach(function (el) {
+                created_dates.push(el.created_date);
+                temperatures.push(el.temperature);
+            });
+            _this.chart = new chart_js__WEBPACK_IMPORTED_MODULE_2__["Chart"]('canvas', {
+                type: 'line',
+                data: {
+                    labels: created_dates.reverse(),
+                    datasets: [{
+                            label: '# of Votes',
+                            data: temperatures.reverse(),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                    }
+                }
+            });
+        });
         setInterval(function () {
             _this.http.get('/log').
                 subscribe(function (resp) {
