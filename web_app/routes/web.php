@@ -31,7 +31,7 @@ Route::get('/sensor-data', function () {
 });
 
 Route::get('/log', function () {
-	$log = DB::table('log')->limit(100)->get();
+	$log = DB::table('log')->orderBy('created_date', 'desc')->limit(100)->get();
 
     return $log;
 });
