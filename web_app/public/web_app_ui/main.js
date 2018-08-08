@@ -321,7 +321,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h1>Closet</h1>\n<ul>\n  <li>Temperature: {{ bme280.temperature | number: '1.1-1' }}</li>\n  <li>Humidity: {{ bme280.humidity | number: '1.1-1' }}</li>\n  <li>Pressure: {{ bme280.pressure | number: '1.1-1' }}</li>\n</ul>\n\n<canvas id=\"canvas\" width=\"400\" height=\"400\">{{ chart }}</canvas>"
+module.exports = "<h1>Closet</h1>\n<ul>\n  <li>Temperature: {{ bme280.temperature | number: '1.1-1' }}</li>\n  <li>Humidity: {{ bme280.humidity | number: '1.1-1' }}</li>\n  <li>Pressure: {{ bme280.pressure | number: '1.1-1' }}</li>\n</ul>\n\n<canvas id=\"canvas\">{{ chart }}</canvas>"
 
 /***/ }),
 
