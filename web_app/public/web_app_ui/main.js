@@ -381,10 +381,10 @@ var AppComponent = /** @class */ (function () {
                 _this.chart = new chart_js__WEBPACK_IMPORTED_MODULE_2__["Chart"]('canvas', {
                     type: 'line',
                     data: {
-                        labels: created_dates,
+                        labels: created_dates.reverse(),
                         datasets: [{
                                 label: '# of Votes',
-                                data: temperatures,
+                                data: temperatures.reverse(),
                                 backgroundColor: [
                                     'rgba(255, 99, 132, 0.2)',
                                     'rgba(54, 162, 235, 0.2)',
