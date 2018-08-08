@@ -35,16 +35,21 @@ export class AppComponent implements OnInit {
         subscribe((resp: any) => {
           console.log(resp);
 
-          let labels;
-          let data;
+          let created_dates = [];
+          let temperatures = [];
+
+          resp.forEach(el => {
+            created_dates.push(el.created_date);
+            temperatures.push(el.temperature);
+          });
 
           this.chart = new Chart('canvas', {
               type: 'line',
               data: {
-                  labels: ["today", "tomm", "blah", "blah", "blah", "ok"],
+                  labels: created_dates,
                   datasets: [{
                       label: '# of Votes',
-                      data: [12, 19, 3, 5, 2, 3],
+                      data: temperatures,
                       backgroundColor: [
                           'rgba(255, 99, 132, 0.2)',
                           'rgba(54, 162, 235, 0.2)',
