@@ -13,12 +13,12 @@
 #  https://www.bosch-sensortec.com/bst/products/all_products/bme280
 #
 # Author : Matt Hawkins
-# Date   : 25/07/2016
+# Date   : 21/01/2018
 #
-# http://www.raspberrypi-spy.co.uk/
+# https://www.raspberrypi-spy.co.uk/
 #
 #--------------------------------------
-import smbus
+import smbus2
 import time
 from ctypes import c_short
 from ctypes import c_byte
@@ -27,8 +27,9 @@ from ctypes import c_ubyte
 DEVICE = 0x76 # Default device I2C address
 
 
-bus = smbus.SMBus(1) # Rev 2 Pi, Pi 2 & Pi 3 uses bus 1
+bus = smbus2.SMBus(1) # Rev 2 Pi, Pi 2 & Pi 3 uses bus 1
                      # Rev 1 Pi uses bus 0
+#time.sleep(3)
 
 def getShort(data, index):
   # return two bytes from data as a signed 16-bit value
@@ -124,7 +125,8 @@ def readBME280All(addr=DEVICE):
   hum_raw = (data[6] << 8) | data[7]
 
   #Refine temperature
-  var1 = ((((temp_raw>>3)-(dig_T1<<1)))*(dig_T2)) >> 11  var2 = (((((temp_raw>>4) - (dig_T1)) * ((temp_raw>>4) - (dig_T1))) >> 12) * (dig_T3)) >> 14
+  var1 = ((((temp_raw>>3)-(dig_T1<<1)))*(dig_T2)) >> 11
+  var2 = (((((temp_raw>>4) - (dig_T1)) * ((temp_raw>>4) - (dig_T1))) >> 12) * (dig_T3)) >> 14
   t_fine = var1+var2
   temperature = float(((t_fine * 5) + 128) >> 8);
 
@@ -158,14 +160,14 @@ def readBME280All(addr=DEVICE):
 def main():
 
   (chip_id, chip_version) = readBME280ID()
-  print "Chip ID     :", chip_id
-  print "Version     :", chip_version
+  print(f"Chip ID: {chip_id}")
+  print(f"Version: {chip_version}")
 
-  temperature,pressure,humidity = readBME280All()
+  (temperature,pressure,humidity) = readBME280All()
 
-  print "Temperature : ", temperature, "C"
-  print "Pressure : ", pressure, "hPa"
-  print "Humidity : ", humidity, "%"
+  print(f"Temperature: {temperature}")
+  print(f"Pressure: {pressure}")
+  print(f"Humidity:{humidity}")
 
-if __name__=="__main__":
-   main()
+if __name__ == "__main__":
+  main()
