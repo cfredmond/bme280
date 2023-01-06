@@ -142,10 +142,3 @@ def readBME280All(addr=DEVICE):
             'pressure': pressure/100.0,
             'humidity': humidity
           }
-
-def main():
-  print(readBME280ID())
-  print(readBME280All())
-
-if __name__ == "__main__":
-  main()
