@@ -1,23 +1,3 @@
-#!/usr/bin/python
-#--------------------------------------
-#    ___  ___  _ ____
-#   / _ \/ _ \(_) __/__  __ __
-#  / , _/ ___/ /\ \/ _ \/ // /
-# /_/|_/_/  /_/___/ .__/\_, /
-#                /_/   /___/
-#
-#           bme280.py
-#  Read data from a digital pressure sensor.
-#
-#  Official datasheet available from :
-#  https://www.bosch-sensortec.com/bst/products/all_products/bme280
-#
-# Author : Matt Hawkins
-# Date   : 21/01/2018
-#
-# https://www.raspberrypi-spy.co.uk/
-#
-#--------------------------------------
 import smbus2
 import time
 from ctypes import c_short
@@ -29,7 +9,6 @@ DEVICE = 0x76 # Default device I2C address
 
 bus = smbus2.SMBus(1) # Rev 2 Pi, Pi 2 & Pi 3 uses bus 1
                      # Rev 1 Pi uses bus 0
-#time.sleep(3)
 
 def getShort(data, index):
   # return two bytes from data as a signed 16-bit value
@@ -55,7 +34,10 @@ def readBME280ID(addr=DEVICE):
   # Chip ID Register Address
   REG_ID     = 0xD0
   (chip_id, chip_version) = bus.read_i2c_block_data(addr, REG_ID, 2)
-  return (chip_id, chip_version)
+  return {
+          'chip_id': chip_id, 
+          'chip_version': chip_version
+        }
 
 def readBME280All(addr=DEVICE):
   # Register Addresses
@@ -155,19 +137,23 @@ def readBME280All(addr=DEVICE):
   elif humidity < 0:
     humidity = 0
 
-  return temperature/100.0,pressure/100.0,humidity
+  return {
+            'temperature': temperature/100.0,
+            'pressure': pressure/100.0,
+            'humidity': humidity
+          }
 
-def main():
+# def main():
 
-  (chip_id, chip_version) = readBME280ID()
-  print(f"Chip ID: {chip_id}")
-  print(f"Version: {chip_version}")
+#   (chip_id, chip_version) = readBME280ID()
+#   print(f"Chip ID: {chip_id}")
+#   print(f"Version: {chip_version}")
 
-  (temperature,pressure,humidity) = readBME280All()
+#   (temperature,pressure,humidity) = readBME280All()
 
-  print(f"Temperature: {temperature}")
-  print(f"Pressure: {pressure}")
-  print(f"Humidity:{humidity}")
+#   print(f"Temperature: {temperature}")
+#   print(f"Pressure: {pressure}")
+#   print(f"Humidity:{humidity}")
 
-if __name__ == "__main__":
-  main()
+# if __name__ == "__main__":
+#   main()
