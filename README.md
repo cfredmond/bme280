@@ -1,7 +1,7 @@
-setup.sh
+pip install cfredmond-bme280
 
-bme280.py
+import cfredmond_bme280
+from cfredmond_bme280 import bme280
 
-api.py
-
-cron.py
+print(bme280.readBME280ID())
+print(bme280.readBME280All())
