@@ -1,24 +1,4 @@
-#!/usr/bin/python
-#--------------------------------------
-#    ___  ___  _ ____
-#   / _ \/ _ \(_) __/__  __ __
-#  / , _/ ___/ /\ \/ _ \/ // /
-# /_/|_/_/  /_/___/ .__/\_, /
-#                /_/   /___/
-#
-#           bme280.py
-#  Read data from a digital pressure sensor.
-#
-#  Official datasheet available from :
-#  https://www.bosch-sensortec.com/bst/products/all_products/bme280
-#
-# Author : Matt Hawkins
-# Date   : 25/07/2016
-#
-# http://www.raspberrypi-spy.co.uk/
-#
-#--------------------------------------
-import smbus
+import smbus2
 import time
 from ctypes import c_short
 from ctypes import c_byte
@@ -27,7 +7,7 @@ from ctypes import c_ubyte
 DEVICE = 0x76 # Default device I2C address
 
 
-bus = smbus.SMBus(1) # Rev 2 Pi, Pi 2 & Pi 3 uses bus 1
+bus = smbus2.SMBus(1) # Rev 2 Pi, Pi 2 & Pi 3 uses bus 1
                      # Rev 1 Pi uses bus 0
 
 def getShort(data, index):
@@ -54,7 +34,10 @@ def readBME280ID(addr=DEVICE):
   # Chip ID Register Address
   REG_ID     = 0xD0
   (chip_id, chip_version) = bus.read_i2c_block_data(addr, REG_ID, 2)
-  return (chip_id, chip_version)
+  return {
+          'chip_id': chip_id, 
+          'chip_version': chip_version
+        }
 
 def readBME280All(addr=DEVICE):
   # Register Addresses
@@ -124,7 +107,8 @@ def readBME280All(addr=DEVICE):
   hum_raw = (data[6] << 8) | data[7]
 
   #Refine temperature
-  var1 = ((((temp_raw>>3)-(dig_T1<<1)))*(dig_T2)) >> 11  var2 = (((((temp_raw>>4) - (dig_T1)) * ((temp_raw>>4) - (dig_T1))) >> 12) * (dig_T3)) >> 14
+  var1 = ((((temp_raw>>3)-(dig_T1<<1)))*(dig_T2)) >> 11
+  var2 = (((((temp_raw>>4) - (dig_T1)) * ((temp_raw>>4) - (dig_T1))) >> 12) * (dig_T3)) >> 14
   t_fine = var1+var2
   temperature = float(((t_fine * 5) + 128) >> 8);
 
@@ -153,19 +137,8 @@ def readBME280All(addr=DEVICE):
   elif humidity < 0:
     humidity = 0
 
-  return temperature/100.0,pressure/100.0,humidity
-
-def main():
-
-  (chip_id, chip_version) = readBME280ID()
-  print "Chip ID     :", chip_id
-  print "Version     :", chip_version
-
-  temperature,pressure,humidity = readBME280All()
-
-  print "Temperature : ", temperature, "C"
-  print "Pressure : ", pressure, "hPa"
-  print "Humidity : ", humidity, "%"
-
-if __name__=="__main__":
-   main()
+  return {
+            'temperature': temperature/100.0,
+            'pressure': pressure/100.0,
+            'humidity': humidity
+          }
