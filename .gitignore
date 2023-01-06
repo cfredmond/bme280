@@ -1,6 +1,7 @@
 venv/
 dist/
 build/
+cfredmond_bme280.egg-info/
 bme280.egg-info/
 tests/__pycache__/
 .pytest_cache/
